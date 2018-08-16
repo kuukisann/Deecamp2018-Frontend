@@ -1,28 +1,43 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div id="app">
+        <header>
+            <my-header2></my-header2>
+        </header>
+        <el-container>
+            <el-main>
+                <input-box></input-box>
+                <display-box imgUrl="https://en.wikipedia.org/wiki/File:Google_Chrome_icon_(September_2014).svg"></display-box>
+            </el-main>
+        </el-container>
+    </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { MyHeader, MyHeader2 } from "./components/common";
+import InputBox from "./components/inputbox/inputbox";
+import DisplayBox from "./components/displaybox/displaybox";
 
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
+    name: "app",
+    components: {
+        MyHeader,
+        MyHeader2,
+        InputBox,
+        DisplayBox
+    }
+};
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body {
+    padding: 0;
+    margin: 0;
+}
+header {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.el-container {
+    text-align: center;
 }
 </style>
