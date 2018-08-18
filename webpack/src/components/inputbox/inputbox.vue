@@ -5,7 +5,7 @@
                 <el-input v-model="input" placeholder="请输入描述"></el-input>
             </el-col>
             <el-col :span="2">
-                <el-button class="send-button" type="primary">好了</el-button>
+                <el-button class="send-button" type="primary" @click="$emit('send-text',input)">好了</el-button>
             </el-col>
         </el-row>
     </div>

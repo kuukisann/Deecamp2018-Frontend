@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script language="javascript" type="text/javascript" src="lib/mosquito.vae.js"></script>
+
+    <script language="javascript" type="text/javascript" src="lib/numjs.js"></script>
+    <script language="javascript" type="text/javascript" src="lib/sketch_rnn.js"></script>
+
+    <!-- <script language="javascript" type="text/javascript" src="interp.js"></script> -->
+</head>
+
+<body>
+<div style="background-color: aqua">
+    <canvas width="512px" height="512px" id="sketch-canvas"></canvas>
+</div>
+<script>
+    function draw_pic(drawing, x, y) {
+        let can = document.getElementById('sketch-canvas');
+        let ctx = can.getContext('2d');
+
+        let dx, dy, pen_down, pen_up, pen_end;
+        let prev_pen = [0, 1, 0];
+
+        for (let i = 0; i < drawing.length; i++) {
+            [dx, dy, pen_down, pen_up, pen_end] = drawing[i];
+            if (prev_pen[2] === 1) {
+                break;
+            }
+            if (prev_pen[0] === 1) {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + dx, y + dy);
+                ctx.stroke();
+            }
+
+            x += dx;
+            y += dy;
+            prev_pen = [pen_down, pen_up, pen_end];
+        }
+    }
+
+    function get_model(model_name) {
+        let request = new XMLHttpRequest();
+        request.open("GET", `./models/${model_name}.vae.json`, false);
+        request.send(null);
+        let model_json = JSON.parse(request.responseText);
+        console.log(model_json);
+
+        // let rnn_model_data = JSON.parse(model_url);
+        let rnn_model = new SketchRNN(model_json);
+        console.log(model_json);
+
+        let z = rnn_model.random_latent_vector();
+
+        let drawing = rnn_model.decode(z, 0.3);
+        drawing = rnn_model.scale_drawing(drawing, 512);
+        drawing = rnn_model.center_drawing(drawing);
+        console.log(drawing);
+        draw_pic(drawing, 256, 256);
+    }
+
+    get_model('ant');
+</script>
+</body>
+
+</html>
